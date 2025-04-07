@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flask-config
+  namespace: final
+data:
+  BACKGROUND_IMAGE_URL: "https://your-bucket.s3.amazonaws.com/your-image.jpg"
+  HEADER_NAME: "Arjoo Khattri"
