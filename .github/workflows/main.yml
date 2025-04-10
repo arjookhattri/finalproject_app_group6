@@ -1,0 +1,43 @@
+
+name: Build and Deploy to Kubernetes
+
+on:
+  pull_request:
+    branches:
+      - main
+    types:
+      - closed
+
+jobs:
+  build:
+    if: github.event.pull_request.merged == true
+    name: Build and Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_SESSION_TOKEN: ${{ secrets.AWS_SESSION_TOKEN }}
+          AWS_REGION: us-east-1
+
+      - name: Build, tag, and push images to Amazon ECR
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_REPOSITORY_MYSQL: mysql-repo
+          ECR_REPOSITORY_WEBAPP: webapp-repo
+          IMAGE_TAG: v1.0
+        run: |
+          # Build images
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_MYSQL:$IMAGE_TAG -f Dockerfile_mysql .
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY_WEBAPP:$IMAGE_TAG -f Dockerfile .
+
+          # Push images to ECR
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_MYSQL:$IMAGE_TAG
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY_WEBAPP:$IMAGE_TAG
