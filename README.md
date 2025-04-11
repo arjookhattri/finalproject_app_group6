@@ -45,8 +45,27 @@ sudo python3 app.py
 ### Running mysql
 ```docker run -d -e MYSQL_ROOT_PASSWORD=pw  my_db```
 
-
 ### Get the IP of the database and export it as DBHOST variable
 ```docker inspect <container_id>```
 
 
+# Apply the manifests in order : 
+
+kubectl apply -f namespaces.yaml
+kubectl apply -f configmap.yaml
+kubectl apply -f secret.yaml
+kubectl apply -f pvc.yaml
+kubectl apply -f serviceaccount.yaml
+kubectl apply -f rbac.yaml
+kubectl apply -f mysql-deployment.yaml
+kubectl apply -f mysql-service.yaml
+kubectl apply -f flask-deployment.yaml
+kubectl apply -f flask-service.yaml
+
+# create secret for ecr (edit AWS account and email)
+
+ kubectl create secret -n final docker-registry ecr-secret   --docker-server=860572194478.dkr.ecr.us-east-1.amazonaws.com   --docker-username=AWS   --docker-password=$(aws ecr get-login-password --region us-east-1)   --docker-email=rgaraween@myseneca.ca
+
+# Check pods 
+
+kubectl get pods -n final
