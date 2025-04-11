@@ -3,9 +3,6 @@ kind: Deployment
 metadata:
   name: flask-app
   namespace: final
-  labels:
-    app: flask
-    tier: frontend
 spec:
   replicas: 1
   selector:
@@ -16,49 +13,53 @@ spec:
       labels:
         app: flask
     spec:
-      serviceAccountName: clo835
+      serviceAccountName: clo835  # Must use IRSA-enabled SA for S3 access
       containers:
-      - name: flask
-        image: <your-ecr-image-url>
-        ports:
-        - containerPort: 81
-        env:
-        - name: BACKGROUND_IMAGE_URL
-          valueFrom:
-            configMapKeyRef:
-              name: flask-config
-              key: BACKGROUND_IMAGE_URL
-        - name: HEADER_NAME
-          valueFrom:
-            configMapKeyRef:
-              name: flask-config
-              key: HEADER_NAME
-        - name: MYSQL_USER
-          valueFrom:
-            secretKeyRef:
-              name: mysql-secret
-              key: MYSQL_USER
-        - name: MYSQL_PASSWORD
-          valueFrom:
-            secretKeyRef:
-              name: mysql-secret
-              key: MYSQL_PASSWORD
-        resources:
-          requests:
-            memory: "128Mi"
-            cpu: "100m"
-          limits:
-            memory: "256Mi"
-            cpu: "200m"
-        livenessProbe:
-          httpGet:
-            path: /
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /
-            port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 5 
+        - name: flask
+          image: <your-account-id>.dkr.ecr.us-east-1.amazonaws.com/webapp-repo:v1.0
+          ports:
+            - containerPort: 81
+          env:
+            - name: BACKGROUND_IMAGE_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: flask-config
+                  key: BACKGROUND_IMAGE_URL
+            - name: HEADER_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: flask-config
+                  key: HEADER_NAME
+            - name: MYSQL_USER
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_USER
+            - name: MYSQL_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: mysql-secret
+                  key: MYSQL_PASSWORD
+            - name: DBHOST
+              value: mysql
+            - name: DBPORT
+              value: "3306"
+          resources:
+            requests:
+              memory: "128Mi"
+              cpu: "100m"
+            limits:
+              memory: "256Mi"
+              cpu: "200m"
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 81
+            initialDelaySeconds: 30
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 81
+            initialDelaySeconds: 5
+            periodSeconds: 5
