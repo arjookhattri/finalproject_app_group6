@@ -1,20 +1,22 @@
----
 apiVersion: eksctl.io/v1alpha5
 kind: ClusterConfig
-
 metadata:
-  name: group6-final-project-eks
-  region: "us-east-1"
-  version: "1.32"
-
-availabilityZones: ["us-east-1a" ,"us-east-1b" ,"us-east-1c"]
+  name: clo835-cluster
+  region: us-east-1
+  version: "1.29"
+nodeGroups:
+  - name: ng-clo835
+    instanceType: t3.medium
+    desiredCapacity: 2
+    volumeSize: 20
+    ssh:
+      allow: true
+      publicKeyName: clo835-key
 iam:
-  serviceRoleARN: arn:aws:iam::860572194478:role/LabRole
-managedNodeGroups:
-- name: nodegroup
-  desiredCapacity: 2
-  instanceType: t3.small
-  ssh:
-    enableSsm: true
-  iam:
-    instanceRoleARN: arn:aws:iam::860572194478:role/LabRole
+  withOIDC: true
+  serviceAccounts:
+    - metadata:
+        name: clo835
+        namespace: final
+      attachPolicyARNs:
+        - arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess
