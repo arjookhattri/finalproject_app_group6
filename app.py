@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request
 from pymysql import connections
-from datetime import datetime
+from datetime import datetime   # datetime import 
 import os
 import random
 import argparse
@@ -45,7 +45,7 @@ COLOR = random.choice(list(color_codes.keys()))
 def home():
     return render_template('addemp.html', color=color_codes[COLOR], bg=BACKGROUND_IMAGE_URL, name=HEADER_NAME)
 
-@app.route("/about", methods=['GET','POST'])
+@app.route("/about", methods=['GET','POST'])  # changing the about route to make sure background image show
 def about():
     return render_template('about.html', color=color_codes[COLOR], name=HEADER_NAME, bg=BACKGROUND_IMAGE_URL, now=datetime.now().strftime("%Y-%m-%d %H:%M"))
 
