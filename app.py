@@ -1,14 +1,14 @@
 from flask import Flask, render_template, request
-from pymysql import connections
-from datetime import datetime   # datetime import 
+from datetime import datetime
 import os
 import random
 import argparse
 import boto3
+# from pymysql import connections  # Uncomment only when MySQL is running
 
 app = Flask(__name__)
 
-# Environment Variables from Secret or ConfigMap
+# ----------------------- ENV VARIABLES -----------------------
 DBHOST = os.environ.get("DBHOST", "localhost")
 DBUSER = os.environ.get("MYSQL_USER", "root")
 DBPWD = os.environ.get("MYSQL_PASSWORD", "password")
@@ -19,16 +19,7 @@ HEADER_NAME = os.environ.get("HEADER_NAME", "Your Name Here")
 BACKGROUND_IMAGE_URL = os.environ.get("BACKGROUND_IMAGE_URL", "")
 print(f"[LOG] Background image URL: {BACKGROUND_IMAGE_URL}")
 
-# MySQL Connection
-db_conn = connections.Connection(
-    host=DBHOST,
-    port=DBPORT,
-    user=DBUSER,
-    password=DBPWD,
-    db=DATABASE
-)
-
-# Color config
+# ----------------------- COLORS -----------------------
 color_codes = {
     "red": "#e74c3c",
     "green": "#16a085",
@@ -42,77 +33,46 @@ SUPPORTED_COLORS = ",".join(color_codes.keys())
 COLOR_FROM_ENV = os.environ.get('APP_COLOR', "lime")
 COLOR = random.choice(list(color_codes.keys()))
 
+# ----------------------- DOWNLOAD IMAGE FUNCTION -----------------------
+def download_background_image(background_url):
+    if background_url:
+        print(f"[LOG] Downloading image from: {background_url}")
+        try:
+            s3 = boto3.client('s3')
+            bucket_name = background_url.split('/')[2].split('.')[0]
+            key = '/'.join(background_url.split('/')[3:])
+            os.makedirs("static", exist_ok=True)
+            s3.download_file(bucket_name, key, 'static/background.jpg')
+        except Exception as e:
+            print(f"[ERROR] Failed to download background image: {e}")
+
+# ----------------------- ROUTES -----------------------
+
 @app.route("/")
 def index():
-    name = os.environ.get("MY_NAME", "Aniket")
-    background_url = os.environ.get("BACKGROUND_URL")
-    print(f"[LOG] Background Image URL: {background_url}")
+    download_background_image(BACKGROUND_IMAGE_URL)
+    return render_template("about.html", name=HEADER_NAME, bg=BACKGROUND_IMAGE_URL, now=datetime.now().strftime("%Y-%m-%d %H:%M"))
 
-    if background_url:
-        s3 = boto3.client('s3')
-        bucket_name = background_url.split('/')[2].split('.')[0]
-        key = '/'.join(background_url.split('/')[3:])
-        s3.download_file(bucket_name, key, 'static/background.jpg')
-
-    return render_template("index.html", name=name)
-
-
-@app.route("/about", methods=['GET','POST'])  # changing the about route to make sure background image show
+@app.route("/about", methods=['GET','POST'])
 def about():
+    download_background_image(BACKGROUND_IMAGE_URL)
     return render_template('about.html', color=color_codes[COLOR], name=HEADER_NAME, bg=BACKGROUND_IMAGE_URL, now=datetime.now().strftime("%Y-%m-%d %H:%M"))
+
+# ----------------------- TEMP DISABLED MYSQL ROUTES -----------------------
 
 @app.route("/addemp", methods=['POST'])
 def AddEmp():
-    emp_id = request.form['emp_id']
-    first_name = request.form['first_name']
-    last_name = request.form['last_name']
-    primary_skill = request.form['primary_skill']
-    location = request.form['location']
-
-    insert_sql = "INSERT INTO employee VALUES (%s, %s, %s, %s, %s)"
-    cursor = db_conn.cursor()
-
-    try:
-        cursor.execute(insert_sql, (emp_id, first_name, last_name, primary_skill, location))
-        db_conn.commit()
-        emp_name = f"{first_name} {last_name}"
-    finally:
-        cursor.close()
-
-    print("Employee added:", emp_name)
-    return render_template('addempoutput.html', name=emp_name, color=color_codes[COLOR])
+    return "MySQL features disabled for local testing."
 
 @app.route("/getemp", methods=['GET', 'POST'])
 def GetEmp():
-    return render_template("getemp.html", color=color_codes[COLOR])
+    return "MySQL features disabled for local testing."
 
 @app.route("/fetchdata", methods=['GET','POST'])
 def FetchData():
-    emp_id = request.form['emp_id']
-    output = {}
-    select_sql = "SELECT emp_id, first_name, last_name, primary_skill, location from employee where emp_id=%s"
-    cursor = db_conn.cursor()
+    return "MySQL features disabled for local testing."
 
-    try:
-        cursor.execute(select_sql, (emp_id,))
-        result = cursor.fetchone()
-        if result:
-            output["emp_id"] = result[0]
-            output["first_name"] = result[1]
-            output["last_name"] = result[2]
-            output["primary_skills"] = result[3]
-            output["location"] = result[4]
-        else:
-            return "No employee found with ID: " + emp_id
-    except Exception as e:
-        print(e)
-        return "An error occurred while fetching data."
-    finally:
-        cursor.close()
-
-    return render_template("getempoutput.html", id=output["emp_id"], fname=output["first_name"],
-                           lname=output["last_name"], interest=output["primary_skills"],
-                           location=output["location"], color=color_codes[COLOR])
+# ----------------------- MAIN -----------------------
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
