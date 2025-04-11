@@ -1,37 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Emp Output</title>
+    <title>Employee Added</title>
     <style>
         body {
-            background-color: {{ color }};
-            font-family: Avenir, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-image: url('{{ bg }}');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .container {
             text-align: center;
-            padding: 50px;
-            color: DodgerBlue;
-        }
-
-        h1, h2 {
-            margin: 15px 0;
-        }
-
-        a {
+            margin-top: 200px;
+            background-color: rgba(0, 0, 0, 0.6);
             display: inline-block;
-            margin-top: 20px;
-            text-decoration: none;
-            color: #333;
-            font-weight: bold;
+            padding: 30px;
+            border-radius: 10px;
         }
-
-        a:hover {
-            color: #000;
+        a {
+            color: lightblue;
+            display: block;
+            margin-top: 20px;
         }
     </style>
 </head>
 <body>
-    <h1>The employee {{ name }} was successfully added to the database</h1>
-    <h2>The Employee has been added to the database</h2>
-    <h2>{{ name }}</h2>
-    <a href="{{ url_for('home') }}">Back</a>
+    <center>
+        <div class="container">
+            <h2>{{ name }}</h2>
+            <h3>Employee {{ name }} Added Successfully!</h3>
+            <a href="/">Add Another Employee</a>
+            <a href="/getemp">Search Employee</a>
+        </div>
+    </center>
 </body>
 </html>

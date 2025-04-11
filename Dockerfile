@@ -12,9 +12,14 @@ RUN apt-get update -y \
 COPY . /app
 WORKDIR /app
 
+
 # Install Python dependencies
 RUN pip3 install --upgrade pip
 RUN pip3 install -r requirements.txt
+
+# Ensure static directory exists (for S3 downloaded images)
+RUN mkdir -p /app/static 
+
 
 # Expose the required port
 EXPOSE 81

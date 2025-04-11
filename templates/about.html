@@ -1,21 +1,39 @@
-<!doctype html>
-<title>Hello from Flask</title>
-<body style="background: url('https://finalprojects3group6.s3.us-east-1.amazonaws.com/backgroundseneca.jpg'); 
-             background-size: cover;">
-</body>
-<div style="color: #e4e4e4;
+<!DOCTYPE html>
+<html>
+<head>
+    <title>About</title>
+    <style>
+        body {
+            background-image: url('{{ bg }}');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
+            color: white;
+        }
+        .container {
+            margin: 150px auto;
+            width: 500px;
+            background-color: rgba(0,0,0,0.6);
+            padding: 30px;
+            border-radius: 10px;
             text-align: center;
-            height: 90px;
-            vertical-align: middle;">
-  {% if name %}
-    <h1>Hello from {{ name }}!</h1>
-  {% else %}
-    <h1>Hello From CLO835!</h1>
-  {% endif %}
+        }
+        a {
+            color: lightblue;
+            display: block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>{{ name }}</h2>
+        <h3>About this Application</h3>
+        <p>This Flask-based web application allows you to add, search, and view employee details.</p>
+        <p>Developed by Clo835 Group 6.</p>
+        <p>Arjoo, Reham, Aniket.</p>
 
-  {% if contents %}
-  <textarea rows="10" cols="50">
-    {{ contents }}
-  </textarea>
-  {% endif %}
-</div>
+        <a href="/">Back to Home</a>
+    </div>
+</body>
+</html>

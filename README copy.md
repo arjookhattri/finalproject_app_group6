@@ -13,29 +13,39 @@ sudo python3 app.py
 ### Building application docker image 
 ```docker build -t my_app -f Dockerfile . ```
 
+### Create a network
+```docker network create clo835 || true```
+
 ### Running mysql
-```docker run -d -e MYSQL_ROOT_PASSWORD=pw  my_db```
+```docker run -d --name mysql --network clo835 -e MYSQL_DATABASE=employees -e MYSQL_ROOT_PASSWORD=password -p 3306:3306  my_db```
 
 
-### Get the IP of the database and export it as DBHOST variable
-```docker inspect <container_id>```
-
-
-### Example when running DB runs as a docker container and app is running locally
-```
-export DBHOST=127.0.0.1
-export DBPORT=3307
 ```
 ### Example when running DB runs as a docker container and app is running locally
 ```
-export DBHOST=172.17.0.2
+export DBHOST=mysql
 export DBPORT=3306
-```
-```
 export DBUSER=root
 export DATABASE=employees
-export DBPWD=pw
-export APP_COLOR=blue
-```
+export DBPWD=password
+export AWS_ACCESS_KEY_ID=
+export AWS_SECRET_ACCESS_KEY=
+export AWS_SESSION_TOKEN=
+export AWS_REGION=us-east-1
+
+
 ### Run the application, make sure it is visible in the browser
-```docker run -p 8080:8080  -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD  my_app```
+```docker run -p 81:81  -e DBHOST=$DBHOST -e DBPORT=$DBPORT -e  DBUSER=$DBUSER -e DBPWD=$DBPWD  my_app```
+ docker run -d --name flaskapp-container --network clo835 -p 81:81 \
+-e DBHOST=$DBHOST \
+-e DBPORT=$DBPORT \
+-e DATABASE=$DATABASE \
+-e DBUSER=$DBUSER \
+-e DBPWD=$DBPWD \
+-e S3_BUCKET_NAME=$S3_BUCKET_NAME \
+-e S3_OBJECT_KEY=$S3_OBJECT_KEY \
+-e AWS_REGION=$AWS_REGION \
+-e AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID \
+-e AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY \
+-e AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN \
+my_app

@@ -1,52 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Get Employee Information</title>
+    <title>Get Employee</title>
     <style>
         body {
-            background-color: {{ color }};
-            font-family: Avenir, sans-serif;
-            text-align: center;
-            padding: 60px;
-            color: black;
-        }
-
-        h1 {
-            color: DodgerBlue;
-        }
-
-        h2 {
-            color: grey;
-        }
-
-        input[type="number"] {
-            height: 25px;
-            font-size: 14pt;
-            width: 300px;
-        }
-
-        button {
-            background: grey;
-            height: 45px;
-            width: 200px;
+            background-image: url('{{ bg }}');
+            background-size: cover;
+            background-position: center;
+            font-family: Arial, sans-serif;
             color: white;
-            font-style: oblique;
-            font-size: 16px;
-            border: none;
-            cursor: pointer;
         }
-
-        button:hover {
-            background: #555;
+        .container {
+            margin: 100px auto;
+            width: 400px;
+            background-color: rgba(0, 0, 0, 0.6);
+            padding: 20px;
+            border-radius: 10px;
+        }
+        input, button {
+            width: 100%;
+            margin-top: 10px;
+            padding: 10px;
         }
     </style>
 </head>
 <body>
-    <h1>Employee Information</h1>
-    <form action="/fetchdata" method="POST" autocomplete="on">
-        <h2>Enter Employee ID</h2>
-        <input type="number" name="emp_id" required autofocus><br><br>
-        <button type="submit">FETCH INFO</button>
-    </form>
+    <div class="container">
+        <h2>{{ name }}</h2>
+        <h3>Search Employee by ID</h3>
+        <form action="/fetchdata" method="post">
+            <input type="text" name="emp_id" placeholder="Employee ID" required>
+            <button type="submit">Search</button>
+        </form>
+        <br>
+        <a href="/" style="color: lightblue;">Back to Home</a>
+    </div>
 </body>
 </html>
