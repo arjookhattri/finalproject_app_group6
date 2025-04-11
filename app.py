@@ -4,6 +4,7 @@ from datetime import datetime   # datetime import
 import os
 import random
 import argparse
+import boto3
 
 app = Flask(__name__)
 
@@ -41,9 +42,20 @@ SUPPORTED_COLORS = ",".join(color_codes.keys())
 COLOR_FROM_ENV = os.environ.get('APP_COLOR', "lime")
 COLOR = random.choice(list(color_codes.keys()))
 
-@app.route("/", methods=['GET', 'POST'])
-def home():
-    return render_template('addemp.html', color=color_codes[COLOR], bg=BACKGROUND_IMAGE_URL, name=HEADER_NAME)
+@app.route("/")
+def index():
+    name = os.environ.get("MY_NAME", "Aniket")
+    background_url = os.environ.get("BACKGROUND_URL")
+    print(f"[LOG] Background Image URL: {background_url}")
+
+    if background_url:
+        s3 = boto3.client('s3')
+        bucket_name = background_url.split('/')[2].split('.')[0]
+        key = '/'.join(background_url.split('/')[3:])
+        s3.download_file(bucket_name, key, 'static/background.jpg')
+
+    return render_template("index.html", name=name)
+
 
 @app.route("/about", methods=['GET','POST'])  # changing the about route to make sure background image show
 def about():
