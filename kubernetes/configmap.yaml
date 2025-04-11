@@ -4,5 +4,5 @@ metadata:
   name: flask-config
   namespace: final
 data:
-  BACKGROUND_IMAGE_URL: "https://your-bucket.s3.amazonaws.com/your-image.jpg"
-  HEADER_NAME: "Arjoo Khattri, Reham, Aniket"
+  BACKGROUND_IMAGE_URL: "https://your-private-bucket.s3.amazonaws.com/background.jpg"
+  HEADER_NAME: "Arjoo, Reham, Aniket"
