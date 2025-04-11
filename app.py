@@ -52,8 +52,8 @@ app = Flask(__name__)
 
 # Load database environment variables
 DBHOST = os.environ.get("DBHOST", "mysql")
-DBUSER = os.environ.get("DBUSER", "root")
-DBPWD = os.environ.get("DBPWD", "password")
+DBUSER = os.environ.get("MYSQL_USER", "root")          # Updated
+DBPWD = os.environ.get("MYSQL_PASSWORD", "password")   # Updated
 DATABASE = os.environ.get("DATABASE", "employees")
 DBPORT = int(os.environ.get("DBPORT", 3306))
 HEADER_NAME = os.environ.get("HEADER_NAME", "Clo835 Group 6")

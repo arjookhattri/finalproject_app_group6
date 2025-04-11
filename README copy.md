@@ -17,13 +17,13 @@ sudo python3 app.py
 ```docker network create clo835 || true```
 
 ### Running mysql
-```docker run -d --name mysql --network clo835 -e MYSQL_DATABASE=employees -e MYSQL_ROOT_PASSWORD=password -p 3306:3306  my_db```
+```docker run -d --name mydb --network clo835 -e MYSQL_DATABASE=employees -e MYSQL_ROOT_PASSWORD=password -p 3306:3306  my_db```
 
 
 ```
 ### Example when running DB runs as a docker container and app is running locally
 ```
-export DBHOST=mysql
+export DBHOST=mydb
 export DBPORT=3306
 export DBUSER=root
 export DATABASE=employees

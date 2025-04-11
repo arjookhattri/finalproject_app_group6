@@ -1,22 +1,39 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Add Employee</title>
+    <title>CLO835 - Group 6</title>
     <style>
         body {
             background-image: url('{{ bg }}');
             background-size: cover;
             background-position: center;
             font-family: Arial, sans-serif;
-            padding: 20px;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        .group-names {
+            color: #fff;
+            font-size: 20px;
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 10px 20px;
+            border-radius: 8px;
+            margin-bottom: 10px;
         }
 
         h1 {
-            color: #333;
+            color: #ff1717;
+            margin-bottom: 20px;
+            text-align: center;
         }
 
         form {
-            background-image: url{};
+            background-color: rgba(255, 255, 255, 0.9);
             padding: 20px;
             border-radius: 8px;
             width: 400px;
@@ -32,18 +49,43 @@
         }
 
         input[type="submit"] {
-            background-color: #333;
+            background-color: #ff1717;
             color: white;
             border: none;
             cursor: pointer;
         }
 
         input[type="submit"]:hover {
-            background-color: #555;
+            background-color: #cc1212;
+        }
+
+        .about-button {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .about-button a {
+            text-decoration: none;
+            background-color: #ffffff;
+            color: #ff1717;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: bold;
+            border: 2px solid #ff1717;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .about-button a:hover {
+            background-color: #ff1717;
+            color: white;
         }
     </style>
 </head>
 <body>
+    <div class="group-names">
+        Group Members: Arjoo, Reham, Aniket
+    </div>
+
     <h1>Add a New Employee</h1>
     <form action="/addemp" method="POST">
         <label>Employee ID:</label><br>
@@ -63,5 +105,9 @@
 
         <input type="submit" value="Add Employee">
     </form>
+
+    <div class="about-button">
+        <a href="/about">Go to About Page</a>
+    </div>
 </body>
 </html>

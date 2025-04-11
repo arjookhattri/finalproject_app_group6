@@ -1,22 +1,24 @@
- apiVersion: v1
+apiVersion: v1
 kind: ConfigMap
 metadata:
   name: flask-config
   namespace: final
 data:
+  # UI
   HEADER_NAME: "Clo835 Group 6"
 
   # S3 Config
-  BACKGROUND_IMAGE_URL: "https://finalprojects3group6.s3.us-east-1.amazonaws.com/backgroundseneca.jpg"
-  S3_BUCKET_NAME: "finalprojects3group6"
+  BACKGROUND_IMAGE_URL: "https://clo835s3bucketgroup6.s3.us-east-1.amazonaws.com/backgroundseneca.jpg"
+  S3_BUCKET_NAME: "clo835s3bucketgroup6"
   S3_OBJECT_KEY: "backgroundseneca.jpg"
   AWS_REGION: "us-east-1"
   AWS_ACCESS_KEY_ID:
   AWS_SECRET_ACCESS_KEY:
-AWS_SESSION_TOKEN:
+  AWS_SESSION_TOKEN:
+
   # MySQL Config
   DBHOST: "mysql"
   DBPORT: "3306"
   DATABASE: "employees"
   MYSQL_USER: "root"
-  MYSQL_PASSWORD: "password"
+  MYSQL_PASSWORD: "my-secret"

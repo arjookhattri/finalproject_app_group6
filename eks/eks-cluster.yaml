@@ -9,7 +9,7 @@ metadata:
 
 availabilityZones: ["us-east-1a" ,"us-east-1b" ,"us-east-1c"]
 iam:
-  serviceRoleARN: arn:aws:iam::860572194478:role/LabRole
+  serviceRoleARN: arn:aws:iam::813634909417:role/LabRole
 addons:
     - name: aws-ebs-csi-driver
 managedNodeGroups:
@@ -19,4 +19,4 @@ managedNodeGroups:
   ssh:
     enableSsm: true
   iam:
-    instanceRoleARN: arn:aws:iam::860572194478:role/LabRole
+    instanceRoleARN: arn:aws:iam::813634909417:role/LabRole

@@ -4,6 +4,7 @@ metadata:
   name: mysql
   namespace: final
 spec:
+  serviceName: "mysql"
   replicas: 1
   selector:
     matchLabels:
@@ -13,10 +14,9 @@ spec:
       labels:
         app: mysql
     spec:
-      serviceAccountName: ebs-access-sa
       containers:
         - name: mysql
-          image: 860572194478.dkr.ecr.us-east-1.amazonaws.com/mysql-repo:v1
+          image: 813634909417.dkr.ecr.us-east-1.amazonaws.com/mysql-repo:v1
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3306
@@ -27,11 +27,11 @@ spec:
                   name: mysql-secret
                   key: MYSQL_PASSWORD
           volumeMounts:
-            - name: data
+            - name: mysql-storage
               mountPath: /var/lib/mysql
       imagePullSecrets:
         - name: ecr-secret
       volumes:
-      - name: data
-        persistentVolumeClaim:        
-          claimName: mysql-pvc
+        - name: mysql-storage
+          persistentVolumeClaim:
+            claimName: mysql-pvc
