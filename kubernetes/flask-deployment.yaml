@@ -19,7 +19,7 @@ spec:
       serviceAccountName: clo835
       containers:
       - name: flask
-        image: <your-ecr-image-url>
+        image: webapp-repo:v1
         ports:
         - containerPort: 81
         env:
