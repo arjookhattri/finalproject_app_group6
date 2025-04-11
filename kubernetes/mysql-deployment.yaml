@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: mysql
   namespace: final
@@ -13,9 +13,11 @@ spec:
       labels:
         app: mysql
     spec:
+      serviceAccountName: ebs-access-sa
       containers:
         - name: mysql
-          image: mysql-repo:v1
+          image: 860572194478.dkr.ecr.us-east-1.amazonaws.com/mysql-repo:v1
+          imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 3306
           env:
@@ -25,9 +27,11 @@ spec:
                   name: mysql-secret
                   key: MYSQL_PASSWORD
           volumeMounts:
-            - name: mysql-storage
+            - name: data
               mountPath: /var/lib/mysql
+      imagePullSecrets:
+        - name: ecr-secret
       volumes:
-        - name: mysql-storage
-          persistentVolumeClaim:
-            claimName: mysql-pvc
+      - name: data
+        persistentVolumeClaim:        
+          claimName: mysql-pvc

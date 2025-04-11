@@ -19,7 +19,8 @@ spec:
       serviceAccountName: clo835
       containers:
       - name: flask
-        image: webapp-repo:v1
+        image: 860572194478.dkr.ecr.us-east-1.amazonaws.com/webapp-repo:v1
+        imagePullPolicy: IfNotPresent
         ports:
         - containerPort: 81
         env:
@@ -62,3 +63,5 @@ spec:
             port: 8080
           initialDelaySeconds: 5
           periodSeconds: 5 
+      imagePullSecrets:
+        - name: ecr-secret
