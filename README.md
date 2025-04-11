@@ -4,6 +4,16 @@
 
 ```ssh-keygen``` 
 
+#install Kubectl and eksctl 
+
+```curl -LO https://dl.k8s.io/release/v1.32.0/bin/linux/amd64/kubectl```
+
+```sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl```
+
+```rm -f ./kubectl```
+
+```chmod 755 kubectl```
+
 # update aws credentials 
 
 ```aws configure```
@@ -13,13 +23,7 @@
 
 ```eksctl create cluster -f  eks-cluster.yaml```
 
-```curl -LO https://dl.k8s.io/release/v1.32.0/bin/linux/amd64/kubectl```
-
-```sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl```
-
-```rm -f ./kubectl```
-
-```chmod 755 kubectl```
+```eksctl create addon   --name aws-ebs-csi-driver   --cluster group6-final-project-eks   --region us-east-1```
 
 ```kubectl get pods -A```
 
@@ -55,6 +59,12 @@
 # Apply the manifests in order : 
 
 ```kubectl apply -f namespaces.yaml```
+
+# create secret for ecr (edit AWS account and email)
+
+```kubectl create secret -n final docker-registry ecr-secret   --docker-server=860572194478.dkr.ecr.us-east-1.amazonaws.com   --docker-username=AWS   --docker-password=$(aws ecr get-login-password --region us-east-1)   --docker-email=rgaraween@myseneca.ca```
+
+
 ```kubectl apply -f configmap.yaml```
 ```kubectl apply -f secret.yaml```
 ```kubectl apply -f pvc.yaml```
@@ -65,10 +75,7 @@
 ```kubectl apply -f flask-deployment.yaml```
 ```kubectl apply -f flask-service.yaml```
 
-# create secret for ecr (edit AWS account and email)
-
-```kubectl create secret -n final docker-registry ecr-secret   --docker-server=860572194478.dkr.ecr.us-east-1.amazonaws.com   --docker-username=AWS   --docker-password=$(aws ecr get-login-password --region us-east-1)   --docker-email=rgaraween@myseneca.ca```
-
 # Check pods 
 
 ```kubectl get pods -n final```
+
