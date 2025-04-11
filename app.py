@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request
 from pymysql import connections
+from datetime import datetime
 import os
 import random
 import argparse
@@ -46,7 +47,7 @@ def home():
 
 @app.route("/about", methods=['GET','POST'])
 def about():
-    return render_template('about.html', color=color_codes[COLOR], name=HEADER_NAME)
+    return render_template('about.html', color=color_codes[COLOR], name=HEADER_NAME, bg=BACKGROUND_IMAGE_URL, now=datetime.now().strftime("%Y-%m-%d %H:%M"))
 
 @app.route("/addemp", methods=['POST'])
 def AddEmp():
